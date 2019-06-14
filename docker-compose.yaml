@@ -1,0 +1,97 @@
+version: '3'
+
+services: 
+
+  # redis实例配置
+
+  redis1:
+    image: redis
+    ports: 
+      - 6381:6379
+    volumes: 
+      - /data/service/redis/data/redis/6381:/data
+      - /data/service/redis/config/redis:/usr/local/etc/redis
+      - /data/service/redis/log/:/var/log/redis/
+    container_name: redis1
+    command: redis-server /usr/local/etc/redis/redis-6381.conf
+  redis2:
+    image: redis
+    ports: 
+      - 6382:6379
+    volumes: 
+      - /data/service/redis/data/redis/6382:/data
+      - /data/service/redis/config/redis:/usr/local/etc/redis
+      - /data/service/redis/log/:/var/log/redis/
+    container_name: redis2
+    command: redis-server /usr/local/etc/redis/redis-6382.conf
+  redis3:
+    image: redis
+    ports: 
+      - 6383:6379
+    volumes: 
+      - /data/service/redis/data/redis/6383:/data
+      - /data/service/redis/config/redis:/usr/local/etc/redis
+      - /data/service/redis/log/:/var/log/redis/
+    container_name: redis3
+    command: redis-server /usr/local/etc/redis/redis-6383.conf 
+  redis4:
+    image: redis
+    ports: 
+      - 6384:6379
+    volumes: 
+      - /data/service/redis/data/redis/6384:/data
+      - /data/service/redis/config/redis:/usr/local/etc/redis
+      - /data/service/redis/log/:/var/log/redis/
+    container_name: redis4
+    command: redis-server /usr/local/etc/redis/redis-6384.conf 
+
+  # redis哨兵集群
+  redis1-sentinel:
+    image: redis
+    ports: 
+      - 26381:26379
+    volumes: 
+      - /data/service/redis/config/sentinel:/usr/local/etc/redis
+      - /data/service/redis/log/:/var/log/redis/
+    container_name: redis1-sentinel
+    command: redis-server /usr/local/etc/redis/sentinel-26381.conf --sentinel
+  redis2-sentinel:
+    image: redis
+    ports: 
+      - 26382:26379
+    volumes: 
+      - /data/service/redis/config/sentinel:/usr/local/etc/redis
+      - /data/service/redis/log/:/var/log/redis/
+    container_name: redis2-sentinel
+    command: redis-server /usr/local/etc/redis/sentinel-26382.conf --sentinel
+  redis3-sentinel:
+    image: redis
+    ports: 
+      - 26383:26379
+    volumes: 
+      - /data/service/redis/config/sentinel:/usr/local/etc/redis
+      - /data/service/redis/log/:/var/log/redis/
+    container_name: redis3-sentinel
+    command: redis-server /usr/local/etc/redis/sentinel-26383.conf --sentinel
+  redis4-sentinel:
+    image: redis
+    ports: 
+      - 26384:26379
+    volumes: 
+      - /data/service/redis/config/sentinel:/usr/local/etc/redis
+      - /data/service/redis/log/:/var/log/redis/
+    container_name: redis4-sentinel
+    command: redis-server /usr/local/etc/redis/sentinel-26384.conf --sentinel
+    
+  redis-gui:
+    image: erikdubbelboer/phpredisadmin
+    restart: always
+    ports: 
+      - 6385:80
+    environment: 
+      REDIS_1_HOST: redis1
+      REDIS_2_HOST: redis2
+      REDIS_3_HOST: redis3
+      REDIS_4_HOST: redis4
+    container_name: redis-gui
+  
